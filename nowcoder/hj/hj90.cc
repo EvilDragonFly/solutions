@@ -1,54 +1,60 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#include<iostream>
+#include<sstream>
 using namespace std;
-int main()
-{
+// int main(){
+//     string ip;
+//     while(cin>>ip){
+//         unsigned int n1,n2,n3,n4;
+//         char dot1,dot2,dot3;
+//         stringstream ss;
+//         ss<<ip;
+//         ss>>n1>>dot1>>n2>>dot2>>n3>>dot3>>n4;                                   //stringstream可以根据字符串和要传递的类型自动分段
+//         cout<<n1<<" "<<n2<<" "<<n3<<" "<<n4<<endl; 
+//         if(n1>=0&&n1<=255 && n2>=0&&n2<=255 &&  n3>=0&&n3<=255 && n4>=0&&n4<=255){
+//             cout<<"YES"<<endl;
+//         }else{
+//             cout<<"NO"<<endl;
+//         }
+        
+//     }
+
+// }
+int main(){
     string ip;
-    while (cin >> ip)
-    {
-        vector<int> dots; //记录点的位置
-        for (int i = 0; i < ip.length(); i++)
-        {
-            if (ip[i] == '.')
-            {
-                dots.push_back(i);
+    while(cin>>ip){
+        int count(0);    //记录数字个数
+        bool isValid = true;
+        for(int i=0;i<ip.size();i++){
+            string num;
+            while(ip[i]!='.'&&i<ip.size()){
+                num+=ip[i];
+                i++;
             }
+            count++;
+            if(num.size()==0){
+                isValid = false;
+                break;
+            }
+            // stringstream ss;
+            // ss<<num;
+            // int n;
+            // ss>>n;
+            int n = stoi(num);
+            if(n!=0&&num[0]=='0' || num[0]=='+' || n<0 || n>255){
+                isValid = false;
+                break;
+            }
+            
         }
-        if (dots.size() != 3 || dots[0] == 0 || dots[2] == ip.size() - 1)
-        {
-            cout << "NO" << endl;
-            continue;
+        if(count!=4){
+            isValid = false;
         }
-        else
-        {
-            vector<int> nums;
-            int start = 0; //记录一个数字的起始位置
-            for (auto i : dots)
-            {
-                string s = ip.substr(start, i - start); //除去点号
-                int num = stoi(s, nullptr, 0);
-                nums.push_back(num);
-                start = i + 1;
-            }
-            string s = ip.substr(dots[2] + 1);
-            nums.push_back(stoi(s, nullptr, 0));
-            if (nums[0] <= 0)
-            {
-                cout << "NO";
-                continue;
-            }
-            for (auto i : nums)
-            {
-                if (i < 0 || i > 255)
-                {
-                    cout << "NO" << endl;
-                    goto label;
-                }
-            }
-            cout << "YES" << endl;
-        label:
-            continue;
+        if(isValid){
+            cout<<"YES"<<endl;
+        }else{
+            cout<<"NO"<<endl;
         }
+        
     }
+
 }
