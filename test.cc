@@ -1,7 +1,8 @@
-#include<iostream>
+#include <iostream>
+#include <string>
 using namespace std;
-int main{
-    //char a =(char)(10-'0');
-    int a = (int)'0';
-    cout<<a;
+int main()
+{
+    int a = 'a' - '0';
+    cout << a;
 }
