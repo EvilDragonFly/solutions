@@ -2,56 +2,48 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-int toleft(vector<int> &hs, int i, vector<int> des)
-{ //队列hs中i左边能与ls组成的最长降序队列的长度
-    if (i == 0)
-        return des.size();
-    int x1 = toleft(hs, i - 1, des); //需要考虑函数对des的影响对后续操作的影响
-    if (hs[i - 1] < des.back())
-    {
-        des.emplace_back(hs[i - 1]);
-        int x2 = toleft(hs, i - 1, des);
-        return max(x1, x2);
-    }
-    return x1;
-}
-int toright(vector<int> &hs, int i, vector<int> des)
-{
-    if (i == hs.size() - 1)
-        return des.size();
-    int x1 = toleft(hs, i + 1, des);
-    if (hs[i + 1] < des.back())
-    {
-        des.emplace_back(hs[i + 1]);
-        int x2 = toleft(hs, i + 1, des);
-        return max(x1, x2);
-    }
-    return x1;
-}
 int main()
 {
     int num;
     while (cin >> num)
     {
-        vector<int> hs;
-        while (num--)
+        vector<int> hs(num);
+        vector<int> left(num, 1); //记录对应点左边的最长ascending queue的长度
+        vector<int> right(num, 1);
+        for (auto &h : hs)
         {
-            int h;
             cin >> h;
-            hs.push_back(h);
+        }
+        for (int i = 0; i < num; i++) // ---->
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (hs[j] < hs[i])
+                {
+                    left[i] = max(left[j] + 1, left[i]);
+                }
+            }
+        }
+        for (int i = num - 1; i >= 0; i--) // <----
+        {
+            for (int j = num - 1; j > i; j--)
+            {
+                if (hs[j] < hs[i])
+                {
+                    right[i] = max(right[j] + 1, right[i]);
+                }
+            }
         }
         vector<int> ns; //以各个同学为top的最长合唱队列
-        for (int i = 0; i < hs.size(); i++)
+        for (int i = 0; i < num; i++)
         {
-            vector<int> des1, des2;
-            int n = toleft(hs, i, des1) + toright(hs, i, des2) + 1;
-            ns.push_back(n);
+            int n = left[i] + right[i] - 1;
+            ns.emplace_back(n);
         }
         int ret = *max_element(ns.begin(), ns.end());
-        cout << ret << endl;
+        cout << num - ret << endl;
     }
 }
-
 // 解决方案，求出最长合唱队形
 // 对于合唱队中最高队员，其位置为i,则合唱队列长度为dp[i]=toleft[i]+toright[i]+1;
 // toleft记录该队员左边最长升序队列，toright反之
