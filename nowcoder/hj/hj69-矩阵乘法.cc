@@ -7,7 +7,7 @@ int main()
     while (cin >> x >> y >> z)
     {
 
-        vector<vector<int>> A(x, vector<int>(y));
+        vector<vector<int>> A(x, vector<int>(y));               // vector的构造方法
         vector<vector<int>> B(y, vector<int>(z));
         for (int i = 0; i < x; i++)
         {

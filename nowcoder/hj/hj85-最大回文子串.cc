@@ -13,6 +13,7 @@ int count(string &str, int idx)
             ret1 += 2;
         else
             break;
+        offset++;
     }
     int ret2(0);
     offset = 1;
@@ -22,6 +23,7 @@ int count(string &str, int idx)
             ret2 += 2;
         else
             break;
+        offset++;
     }
     return max(ret1, ret2);
 }
@@ -36,9 +38,11 @@ int main()
     for (int i = 0; i < len; i++)
     {
         ret = max(ret, count(str, i));
-        
     }
     cout << ret << endl;
     clock_t end = clock();
     cout << (end - begin) / CLOCKS_PER_SEC << "s";
 }
+
+// 另一个思路是回文子串的逆序字符串等于原字符串，调用algorithm中的std::reverse(str.begin(),str.end())来进行逆序操作
+// 直接遍历字符串str中str.size()~1的子串，判断是否满足条件
