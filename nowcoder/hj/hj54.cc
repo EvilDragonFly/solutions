@@ -1,64 +1,52 @@
 #include<iostream>
-#include<stack>
+#include<string>
+#include<vector>
 using namespace std;
+// 3+2*{1+2*[-4/(8-6)+7]} 25
 
-void compute(stack<int>& st1, stack<char>& st2){ //根据栈顶运算符弹出栈顶两个元素进行运算
-    int b = st1.top();
-        st1.pop();
-    int a = st1.top();
-        st1.pop();
-    char op = st2.top(); //栈顶运算符
-        st2.pop();
-    if(op == '+') a = a + b; //加
-    else if(op == '-') a = a - b; //减
-    else if(op == '*') a = a * b; //乘
-    else if(op == '/') a = a / b; //除
-    st1.push(a);
-}
-
-bool shallcompute(char m, char n){ //比较运算符优先级
-    if(m == '(') //括号优先级最高
-        return false;
-    else if((m == '+' || m == '-') && (n == '*' || n == '/')) //加减法小于乘除法
-        return false;
-    return true;
+int compute(string& s, int left, int right){
+    char op = '+'; //默认加开始
+    int num = 0;
+    vector<int> st;
+    for(int i = left; i <= right; i++){
+        if(isdigit(s[i])) //数字
+            num = num * 10 + s[i] - '0'; //计算该部分数字总和
+        if(s[i] == '('){ //进入左括号
+            int layer = 0; //统计左括号层数
+            int j = i;
+            while(j <= right){ //遍历到右边
+                if(s[j] == '(')
+                    layer++; //遇到左括号，层数累加
+                else if(s[j] == ')'){
+                    layer--; //遇到右括号层数递减
+                    if(layer == 0) //直到层数为0
+                        break;
+                }
+                j++;
+            }
+            num = compute(s, i + 1, j - 1); //递归计算括号中的部分
+            i = j + 1;
+        }
+        if(!isdigit(s[i]) || i == right){ //遇到运算符或者结尾
+            switch(op){ //根据运算符开始计算
+                case '+': st.push_back(num); break; //加减法加入到末尾
+                case '-': st.push_back(-num); break;
+                case '*': st.back() *= num; break; //乘除法与末尾计算
+                case '/': st.back() /= num; break;
+            }
+            op = s[i]; //修改为下一次的运算符
+            num = 0;
+        }
+    }
+    int res = 0; 
+    for(int x : st) //累加和
+        res += x;
+    return res;
 }
 int main(){
     string s;
     while(cin >> s){
-       stack<int> st1; //记录运算数字
-       stack<char> st2; //记录运算符
-       st2.push('('); //整个运算式添加括号
-       s += ')';
-       bool flag = false;
-       for(int i = 0; i < s.length(); i++){
-           if(s[i] == '(') //如果是左括号都在运算符栈加入(
-               st2.push('(');
-           else if(s[i] == ')'){ //遇到右括号
-               while(st2.top() != '('){ //弹出开始计算直到遇到左括号
-                   compute(st1, st2);
-               }
-               st2.pop(); //弹出左括号
-           } else if(flag){ //运算符
-               while(shallcompute(st2.top(), s[i])){ //比较运算优先级
-                   compute(st1, st2); //可以直接计算
-               }
-               st2.push(s[i]); //需要将现阶段加入栈中等待运算
-               flag = false;
-           } else{ //数字
-                int j = i; //记录起始
-                if(s[j] == '-' || s[j] == '+') //正负号
-                    i++;
-                while(isdigit(s[i])){
-                    i++;
-                }
-                string temp = s.substr(j, i - j); 
-                st1.push(stoi(temp)); //截取数字部分，转数字
-                i--;
-                flag = true; //数字结束，下一次flag为true就是运算符了
-           }
-       }
-      cout << st1.top() << endl; //输出
+        cout << compute(s, 0, s.length() - 1) << endl;
     }
     return 0;
 }

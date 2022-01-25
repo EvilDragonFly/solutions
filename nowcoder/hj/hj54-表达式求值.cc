@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cctype>
 using namespace std;
+// 3+2*{1+2*[-4/(8-6)+7]} 25
 //比较运算符优先级
 bool shallcompute(char oper1, char oper2) // 判断需要运算后面再计算前面的conditions
 {
@@ -42,11 +43,15 @@ int main()
     bool flag = true;      // true表示上一个字符是除右括号之外的操作符
     for (auto c : str)
     {
-        if (isdigit(c) || (flag && (c == '+' || c == '-')))         //除右括号之外操作符之后的+或-被视作数字的正负号
-            ss << c;
         //判断是否操作符
-        else
+        if (!isdigit(c))
         {
+            if (flag && (c == '+' || c == '-'))         //除右括号之外的操作符紧接着的+和-被视作正负号
+            {
+                ss << c;
+                flag = false;
+                continue;
+            }
             if (!ss.str().empty()) // 将数字压入栈
             {
                 int num;
@@ -54,7 +59,6 @@ int main()
                 ss.str("");
                 ss.clear(); // 必须清空该stream的EOF状态
                 opernums.emplace(num);
-                flag = false; // 标志数字读取结束，数字后一定是操作符，操作符之后的不一定是操作数
             }
             if (c == ')')
             {
@@ -69,6 +73,11 @@ int main()
                 compute(opernums, opertors);
             opertors.emplace(c);
             flag = true;
+        }
+        else
+        {
+            ss << c;
+            flag = false;
         }
     }
     cout << opernums.top();
