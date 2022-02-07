@@ -14,7 +14,7 @@ int main()
     string str;      //输入没有个数，只能先存入str
     getline(cin, str);
     stringstream ss(str);
-    while (getline(ss, str, ' '))
+    while (getline(ss, str, ' '))           //分割字符串
     {
         int num = stoi(str); //默认base=10
         m[num]++;
