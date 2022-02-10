@@ -3,5 +3,6 @@
         "*.tcc": "cpp",
         "ctime": "cpp",
         "iostream": "cpp"
-    }
+    },
+    "diffEditor.wordWrap": "on"
 }
