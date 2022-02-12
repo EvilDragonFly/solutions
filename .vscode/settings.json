@@ -2,7 +2,8 @@
     "files.associations": {
         "*.tcc": "cpp",
         "ctime": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     },
     "diffEditor.wordWrap": "on"
 }
