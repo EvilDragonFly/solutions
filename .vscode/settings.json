@@ -3,7 +3,8 @@
         "*.tcc": "cpp",
         "ctime": "cpp",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "algorithm": "cpp"
     },
     "diffEditor.wordWrap": "on"
 }

@@ -21,7 +21,7 @@ int main()
 {
     int count1, count2;
     cin >> count1 >> count2;
-    vector<int> nums1(count1), nums2(count2); // 大括号小括号初始化有差异，大括号初始化cin不会阻塞输入流
+    vector<int> nums1(count1), nums2(count2); // 大括号小括号初始化有差异，大括号中数字会被认为是元素值
     for (auto &n : nums1)
         cin >> n;
     for (auto &n : nums2)
