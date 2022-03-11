@@ -4,7 +4,9 @@
         "ctime": "cpp",
         "iostream": "cpp",
         "ostream": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "ratio": "cpp",
+        "valarray": "cpp"
     },
     "diffEditor.wordWrap": "on"
 }
