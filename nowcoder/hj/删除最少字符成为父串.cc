@@ -61,9 +61,16 @@ int main()
         int len = p.size() + ret;
         for (auto eidx : endIndex)
         {
-            if (eidx - sidx + 1 > p.size() && eidx - sidx + 1 <= len && isFatherStr(s.substr(sidx, eidx - sidx + 1), p))
+            //当检查的字符串长度大于之前找到伪父串的长度，不合要求
+            if (eidx - sidx + 1 >= len)
+                break;
+            //字符串长度小于p
+            else if (eidx - sidx + 1 < p.size())
+                continue;
+            else if (isFatherStr(s.substr(sidx, eidx - sidx + 1), p))
             {
-                ret = min<int>(eidx - sidx + 1 - p.size(), ret); // explicitly mention the template argument
+                // ret = min<int>(eidx - sidx + 1 - p.size(), ret); // explicitly mention the template argument
+                ret = eidx - sidx + 1 - p.size();
                 break;
             }
         }
